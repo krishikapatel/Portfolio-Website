@@ -1,48 +1,199 @@
-const words=["Fullstack Developer","Web Developer","UI/UX Designer"]
+// ==============================
+// Typing Animation
+// ==============================
 
-let i=0 
-let j=0
-let current=""
-let isDeleting=false
+const words = [
+    "Full Stack Developer",
+    "Web Developer",
+    "UI/UX Designer"
+];
 
-function type(){ // Main function to handle the typing effect
+let wordIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
 
-current=words[i]// Get the current word from the array based on index i
+const typingText = document.querySelector(".typing");
 
-if(isDeleting){ // If we are in the deleting phase, remove one character from the current word
-j-- // Decrease the index j to remove characters from the end of the current word
-}else{ // If we are in the typing phase, add one character to the current word
-j++ // Increase the index j to add characters from the current word
+function typeEffect() {
+
+    const currentWord = words[wordIndex];
+
+    if (!isDeleting) {
+
+        typingText.textContent = currentWord.substring(0, charIndex);
+        charIndex++;
+
+        if (charIndex > currentWord.length) {
+            isDeleting = true;
+            setTimeout(typeEffect, 1200);
+            return;
+        }
+
+    } else {
+
+        typingText.textContent = currentWord.substring(0, charIndex);
+        charIndex--;
+
+        if (charIndex < 0) {
+            isDeleting = false;
+            wordIndex++;
+
+            if (wordIndex === words.length) {
+                wordIndex = 0;
+            }
+        }
+    }
+
+    setTimeout(typeEffect, isDeleting ? 60 : 120);
 }
 
-document.querySelector(".typing").textContent=current.substring(0,j) // Update the text content of the element with class "typing" to show the current substring of the word based on index j
-
-if(!isDeleting && j===current.length){ // If we have finished typing the current word, start the deleting phase after a short delay
-isDeleting=true // Set the isDeleting flag to true to start deleting characters
-setTimeout(type,1000) // Wait for 1 second before starting to delete the word
-return // Return early to prevent the function from immediately starting to delete the word without showing it for a moment
-}
-
-if(isDeleting && j===0){ // If we have finished deleting the current word, move to the next word and start typing it
-isDeleting=false // Set the isDeleting flag to false to start typing the next word
-i++ // Move to the next word in the array
-if(i===words.length){   // If we have reached the end of the words array, reset to the first word
-i=0 // Reset index i to 0 to loop back to the first word in the array
-}
-}
-
-setTimeout(type,120)/* Adjust typing speed by changing the timeout duration (e.g., 120ms for normal speed, 80ms for faster typing)  */
-
-}
-
-type() // Start the typing effect when the page loads by calling the type function for the first time
+typeEffect();
 
 
+// ==============================
 // Mobile Menu
+// ==============================
 
 const menuToggle = document.getElementById("menu-toggle");
 const navLinks = document.getElementById("nav-links");
 
 menuToggle.addEventListener("click", () => {
+
     navLinks.classList.toggle("active");
+
+});
+
+
+// ==============================
+// Close Menu After Click
+// ==============================
+
+document.querySelectorAll(".nav-links a").forEach(link => {
+
+    link.addEventListener("click", () => {
+
+        navLinks.classList.remove("active");
+
+    });
+
+});
+
+
+// ==============================
+// Navbar Shadow on Scroll
+// ==============================
+
+window.addEventListener("scroll", () => {
+
+    const navbar = document.querySelector(".navbar");
+
+    if (window.scrollY > 50) {
+
+        navbar.style.boxShadow = "0 10px 25px rgba(0,0,0,0.4)";
+
+    } else {
+
+        navbar.style.boxShadow = "none";
+
+    }
+
+});
+
+
+// ==============================
+// Active Navigation Link
+// ==============================
+
+const sections = document.querySelectorAll("section");
+const navItems = document.querySelectorAll(".nav-links a");
+
+window.addEventListener("scroll", () => {
+
+    let current = "";
+
+    sections.forEach(section => {
+
+        const sectionTop = section.offsetTop - 150;
+
+        if (pageYOffset >= sectionTop) {
+
+            current = section.getAttribute("id");
+
+        }
+
+    });
+
+    navItems.forEach(link => {
+
+        link.classList.remove("active");
+
+        if (link.getAttribute("href") === "#" + current) {
+
+            link.classList.add("active");
+
+        }
+
+    });
+
+});
+
+
+// ==============================
+// Scroll Reveal Animation
+// ==============================
+
+const revealElements = document.querySelectorAll(
+".about-box,.skill,.project-card,.experience-box,.edu-card,.cert-box,form"
+);
+
+function reveal() {
+
+    revealElements.forEach(el => {
+
+        const windowHeight = window.innerHeight;
+
+        const revealTop = el.getBoundingClientRect().top;
+
+        if (revealTop < windowHeight - 120) {
+
+            el.style.opacity = "1";
+            el.style.transform = "translateY(0)";
+
+        }
+
+    });
+
+}
+
+revealElements.forEach(el => {
+
+    el.style.opacity = "0";
+    el.style.transform = "translateY(50px)";
+    el.style.transition = "0.8s";
+
+});
+
+window.addEventListener("scroll", reveal);
+
+reveal();
+
+
+// ==============================
+// Smooth Button Hover
+// ==============================
+
+document.querySelectorAll(".btn").forEach(btn => {
+
+    btn.addEventListener("mouseenter", () => {
+
+        btn.style.transform = "scale(1.05)";
+
+    });
+
+    btn.addEventListener("mouseleave", () => {
+
+        btn.style.transform = "scale(1)";
+
+    });
+
 });
