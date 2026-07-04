@@ -36,3 +36,13 @@ setTimeout(type,120)/* Adjust typing speed by changing the timeout duration (e.g
 }
 
 type() // Start the typing effect when the page loads by calling the type function for the first time
+
+
+// Mobile Menu
+
+const menuToggle = document.getElementById("menu-toggle");
+const navLinks = document.getElementById("nav-links");
+
+menuToggle.addEventListener("click", () => {
+    navLinks.classList.toggle("active");
+});
